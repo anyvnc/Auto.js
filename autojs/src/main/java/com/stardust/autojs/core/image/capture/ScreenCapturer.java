@@ -14,9 +14,6 @@ import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import android.util.Log;
 import android.view.OrientationEventListener;
 
 import com.stardust.autojs.runtime.exception.ScriptException;
@@ -29,7 +26,6 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Created by Stardust on 2017/5/17.
  */
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 public class ScreenCapturer {
 
     public static final int ORIENTATION_AUTO = Configuration.ORIENTATION_UNDEFINED;
@@ -129,13 +125,14 @@ public class ScreenCapturer {
             setImageListener(mHandler);
             return;
         }
-        new Thread(() -> {
-            Log.d(LOG_TAG, "AcquireImageLoop: start");
-            Looper.prepare();
-            mImageAcquireLooper = Looper.myLooper();
-            setImageListener(new Handler());
-            Looper.loop();
-            Log.d(LOG_TAG, "AcquireImageLoop: stop");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                mImageAcquireLooper = Looper.myLooper();
+                setImageListener(new Handler());
+                Looper.loop();
+            }
         }).start();
     }
 
@@ -154,7 +151,6 @@ public class ScreenCapturer {
         }, handler);
     }
 
-    @Nullable
     public Image capture() {
         Exception e = mException;
         if (e != null) {
@@ -179,7 +175,6 @@ public class ScreenCapturer {
         return mScreenDensity;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void release() {
         if (mImageAcquireLooper != null) {
             mImageAcquireLooper.quit();

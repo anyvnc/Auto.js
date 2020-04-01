@@ -1,7 +1,5 @@
 package com.stardust.autojs.runtime.exception;
 
-import org.mozilla.javascript.EvaluatorException;
-import org.mozilla.javascript.RhinoException;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
