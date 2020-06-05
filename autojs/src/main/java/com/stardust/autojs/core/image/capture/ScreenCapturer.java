@@ -165,8 +165,8 @@ public class ScreenCapturer {
                     mUnderUsingImage.close();
                 }
                 mUnderUsingImage = cachedImage;
-                return cachedImage;
             }
+            return cachedImage;
         }
         throw new ScriptInterruptedException();
     }
